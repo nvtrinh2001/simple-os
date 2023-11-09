@@ -7,5 +7,10 @@ load:
 link:
 	i686-elf-g++ -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib loader.o kernel.o -lgcc
 
+image:
+	cp myos.bin isodir/boot/myos.bin
+	grub-mkrescue -o myos.iso isodir
+
 clean: 
-	rm *.o *.bin
+	rm *.o *.bin *.iso
+
