@@ -11,6 +11,14 @@ image:
 	cp myos.bin isodir/boot/myos.bin
 	grub-mkrescue -o myos.iso isodir
 
+image-test:
+	qemu-system-i386 -cdrom myos.iso
+
+kernel-test:
+	qemu-system-i386 -kernel myos.bin
+
+install: compile load link 
+
 clean: 
 	rm *.o *.bin *.iso
 
