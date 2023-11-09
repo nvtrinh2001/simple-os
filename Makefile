@@ -1,18 +1,11 @@
-GPPPARAMS = -m32 -fno-use-cxa-atexit -nostdlib -fno-builtin -fno-rtti -fno-exceptions -fno-leading-underscore
-ASPARAMS = -m32
-LDPARAMS = -melf_i386 -no-pie
+compile:
+	i686-elf-g++ -c kernel.cpp -o kernel.o -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti
 
-objects = loader.o kernel.o
+load:
+	i686-elf-as loader.s -o loader.o
 
-%.o: %.cpp
-	g++ $(GPPPARAMS) -o $@ -c $<
+link:
+	i686-elf-g++ -T linker.ld -o myos.bin -ffreestanding -O2 -nostdlib loader.o kernel.o -lgcc
 
-%.o: %.s
-	g++ $(ASPARAMS) -o $@ $<
-
-mykernel.bin: linker.ld $(objects)
-	ld $(LDPARAMS) -T $< -o $@ $(objects)
-
-install: mykernel.bin
-	sudo cp $< /boot/mykernel.bin
-
+clean: 
+	rm *.o *.bin
